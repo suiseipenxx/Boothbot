@@ -1,4 +1,5 @@
 you need to install the Selenium package.Open your command prompt or terminal and run the following command:
+
 pip install selenium
 
 Before using, please open bot.py and enter your account information, password, and URL into the "輸入" area.
