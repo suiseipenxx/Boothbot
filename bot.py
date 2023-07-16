@@ -65,9 +65,9 @@ while 1:
         click('[class="btn btn--primary u-w-sp-100"]')
         click('[name="commit"]')
         click('[name="button"]')
-        #click('[name="commit"]')
+        click('[name="commit"]')
         print ("購買完成")
-        driver.quit()
+        driver.close()
         sys.exit("結束程式")
     except:
         driver.refresh() # 重整頁面
