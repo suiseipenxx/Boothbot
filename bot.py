@@ -11,9 +11,9 @@ import time
 import sys
 
 #輸入區
-url = "https://booth.pm/zh-tw/items/4610130"  # 搶購商品網址
-account = "pandorabox57042@gmail.com"  # pixiv賬號
-password = "hyh010308"  # pixiv密碼 
+url = ""  # 搶購商品網址
+account = ""  # pixiv賬號
+password = ""  # pixiv密碼 
 #優化
 @retry(wait_fixed=2, stop_max_attempt_number=1)
 def send(path,ap):
