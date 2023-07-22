@@ -11,11 +11,11 @@ import time
 import sys
 
 #輸入區
-url = ""  # 搶購商品網址
+url = ""  #搶購商品網址
 account = ""  # pixiv賬號
 password = ""  # pixiv密碼 
 #優化
-@retry(wait_fixed=2, stop_max_attempt_number=1)
+@retry(wait_fixed=1, stop_max_attempt_number=5)
 def send(path,ap):
     driver.find_element(By.CSS_SELECTOR,path).send_keys(ap)
 
@@ -27,7 +27,6 @@ options = uc.ChromeOptions()
 options.add_argument('--headless')#無頭模式
 options.add_argument('--window-size=1920,1080')#設定視窗大小，開啟無頭模式情況下一定要有，不然會抓不到元素
 options.add_argument('--start-maximized')
-options.add_argument('--disable-javascript')#禁用js
 options.add_argument('--log-level=1')#設定log等級，不然會有很多log顯示
 options.add_argument('--no-sandbox')#最高權限
 options.add_argument('--blink-settings=imagesEnabled=false')#不加載圖片
@@ -41,7 +40,7 @@ options.page_load_strategy='none'#網頁載入策略
 
 #反反爬蟲
 ua = UserAgent()
-options.add_argument("--user-agent={}".format(ua.googlechrome))
+options.add_argument("--user-agent={}".format(ua.edge))
 options.add_experimental_option('excludeSwitches', ['enable-automation'])
 options.add_experimental_option('useAutomationExtension', False)
 
@@ -66,28 +65,29 @@ click('[class="sc-bdnxRM jvCTkj sc-dlnjwi klNrDe sc-2o1uwj-6 NmyKg sc-2o1uwj-6 N
 print('登入成功')
 
 driver.implicitly_wait(3)
-locators=(By.CSS_SELECTOR,'[class="btn add-cart full-length"]')#等待的條件
 print('搶商品中')
 
-while 1:
+try:
+    while driver.find_element(By.CSS_SELECTOR,'[class="btn add-cart full-length disabled"]')!=None :
+        driver.refresh() # 在 while 循環內刷新頁面
+        time.sleep(1)
+        print("刷新")
+except:
     try:
-        buy = WebDriverWait(driver, 5, 0.1).until(EC.presence_of_element_located(locators)) # 顯性等待
-        buy.click() # 偵測到可以購買按鈕就點擊按鈕
+        click('[class="btn add-cart full-length"]')
         print("開始結賬")
-        click('[class="btn btn--primary u-w-sp-100"]')
+        click('[href="https://checkout.booth.pm/checkout/step1?uuid=77c6444b-e8fa-46d9-a5e2-6463c889a13b"]')
         print("確認付款方式")
         click('[name="commit"]')
         print("確認送貨地址")
         click('[name="button"]')
         print("購買")
-        #click('[name="commit"]')
-        print ("購買完成")
-        driver.close()
+        click('[name="commit"]')
+        print("購買完成")
         driver.quit()
     except: 
-        driver.refresh() # 重整頁面
+        driver.refresh() # 在 while 循環內刷新頁面
+        time.sleep(0.5)
         print("刷新")
-        
-        
-        
+
         
